@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-v1
+  labels:
+    app: demo
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo
+      version: v1
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app: demo
+        version: v1
+    spec:
+      serviceAccountName: demo
+      containers:
+        - name: demo
+          image: xdaduck/demo-https:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9010
+              name: https-port
+          env:
+            - name: application.port
+              value: 9010
+
