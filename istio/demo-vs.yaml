@@ -6,12 +6,9 @@ spec:
   hosts:
     - "demo"
   http:
-    - match:
-        - uri:
-            prefix: "/"
-      route:
+    - route:
         - destination:
             host: demo
-            subset: v2
+            subset: v1
             port:
               number: 9010
