@@ -6,9 +6,11 @@ metadata:
     app: demo
     service: demo
 spec:
+  type: NodePort
   ports:
     - port: 9010
       name: https-port
+      nodePort: 31234
   selector:
     app: demo
     version: v1
