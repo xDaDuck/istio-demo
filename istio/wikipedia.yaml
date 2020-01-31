@@ -1,0 +1,49 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: wikipedia
+spec:
+  hosts:
+    - www.wikipedia.org
+  ports:
+    - number: 80
+      name: http-port
+      protocol: HTTP
+    - number: 443
+      name: https-port-for-tls-origination
+      protocol: HTTPS
+  resolution: DNS
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: wikipedia
+spec:
+  hosts:
+    - www.wikipedia.org
+  http:
+    - match:
+        - port: 80
+      route:
+        - destination:
+            host: www.wikipedia.org
+            subset: tls-origination
+            port:
+              number: 443
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: wikipedia
+spec:
+  host: www.wikipedia.org
+  subsets:
+    - name: tls-origination
+      trafficPolicy:
+        loadBalancer:
+          simple: ROUND_ROBIN
+        portLevelSettings:
+          - port:
+              number: 443
+            tls:
+              mode: SIMPLE # initiates HTTPS when accessing www.wikipedia.org

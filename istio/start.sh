@@ -19,15 +19,13 @@ istio-apply(){
 }
 
 kubectl delete -f sleep.yaml
-kubectl delete -f demo.yaml
-kubectl delete -f demo-istio.yaml
 kubectl delete -f proxy.yaml
 kubectl delete -f proxy-istio.yaml
+kubectl delete -f wikipedia.yaml
 
+kubectl apply -f wikipedia.yaml
 istio-apply ${basedir}/sleep.yaml
-istio-apply ${basedir}/demo.yaml
 
-kubectl apply -f demo-istio.yaml
 kubectl apply -f proxy.yaml
 
 PROXY_PORT=3128
