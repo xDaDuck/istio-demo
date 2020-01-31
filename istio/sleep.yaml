@@ -15,24 +15,6 @@
 ##################################################################################################
 # Sleep service
 ##################################################################################################
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: sleep
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: sleep
-  labels:
-    app: sleep
-spec:
-  ports:
-    - port: 80
-      name: http
-  selector:
-    app: sleep
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -47,7 +29,6 @@ spec:
       labels:
         app: sleep
     spec:
-      serviceAccountName: demo
       containers:
         - name: sleep
           image: governmentpaas/curl-ssl
